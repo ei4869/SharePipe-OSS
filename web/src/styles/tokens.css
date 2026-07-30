@@ -1,0 +1,22 @@
+:root {
+  color-scheme: light;
+  --canvas: #ffffff;
+  --canvas-subtle: #f5f7fa;
+  --ink: #172033;
+  --muted: #667085;
+  --muted-soft: #98a2b3;
+  --primary: #2f6fed;
+  --primary-hover: #245ed2;
+  --primary-soft: #edf3ff;
+  --border: #d8dee8;
+  --border-strong: #c5ceda;
+  --success: #12a873;
+  --warning: #f59e0b;
+  --danger: #e5484d;
+  --radius: 10px;
+  --radius-small: 6px;
+  --header-height: 78px;
+  --content-max: 1480px;
+  --font-sans: Inter, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --focus-ring: 0 0 0 3px rgb(47 111 237 / 18%);
+}

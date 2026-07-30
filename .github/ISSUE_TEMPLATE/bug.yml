@@ -1,0 +1,40 @@
+name: 缺陷报告
+description: 提交可复现的 SharePipe OSS 缺陷
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: 请勿粘贴密钥、分享链接、管理员令牌、真实文件名或个人日志。安全问题请使用私密漏洞报告。
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: storage
+    attributes:
+      label: 存储后端
+      options: [本地磁盘, NAS/挂载目录, AWS S3, Cloudflare R2 S3 API, MinIO, 其他 S3 兼容服务]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 最小复现步骤
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果与已脱敏日志
+    validations:
+      required: true

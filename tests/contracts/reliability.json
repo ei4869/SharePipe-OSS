@@ -1,0 +1,31 @@
+{
+  "ranges": [
+    { "header": "bytes=0-9", "size": 100, "valid": true, "start": 0, "end": 9 },
+    { "header": "bytes=10-", "size": 100, "valid": true, "start": 10, "end": 99 },
+    { "header": "bytes=-10", "size": 100, "valid": true, "start": 90, "end": 99 },
+    { "header": "bytes=90-200", "size": 100, "valid": true, "start": 90, "end": 99 },
+    { "header": "bytes=7-7", "size": 100, "valid": true, "start": 7, "end": 7 },
+    { "header": "items=0-1", "size": 100, "valid": false },
+    { "header": "bytes=100-", "size": 100, "valid": false },
+    { "header": "bytes=5-4", "size": 100, "valid": false },
+    { "header": "bytes=0-1,3-4", "size": 100, "valid": false },
+    { "header": "bytes=-1", "size": 0, "valid": false }
+  ],
+  "previews": [
+    { "mime": "image/png", "name": "image.png", "allowed": true },
+    { "mime": "image/jpeg", "name": "image.jpg", "allowed": true },
+    { "mime": "image/webp", "name": "image.webp", "allowed": true },
+    { "mime": "application/pdf", "name": "document.pdf", "allowed": true },
+    { "mime": "text/plain", "name": "notes.txt", "allowed": true },
+    { "mime": "application/json", "name": "data.json", "allowed": true },
+    { "mime": "application/xml", "name": "data.xml", "allowed": true },
+    { "mime": "audio/mpeg", "name": "sound.mp3", "allowed": true },
+    { "mime": "video/mp4", "name": "movie.mp4", "allowed": true },
+    { "mime": "text/html", "name": "page.html", "allowed": false },
+    { "mime": "application/xhtml+xml", "name": "page.xhtml", "allowed": false },
+    { "mime": "image/svg+xml", "name": "vector.svg", "allowed": false },
+    { "mime": "application/x-msdownload", "name": "program.exe", "allowed": false },
+    { "mime": "application/octet-stream", "name": "random.bin", "allowed": false },
+    { "mime": "application/octet-stream", "name": "source.ts", "allowed": true }
+  ]
+}

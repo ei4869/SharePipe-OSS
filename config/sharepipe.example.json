@@ -1,0 +1,86 @@
+{
+    "server":  {
+                   "listen":  "127.0.0.1:8080",
+                   "publicBaseURL":  "http://127.0.0.1:8080",
+                   "trustedProxyCIDRs":  [
+
+                                         ],
+                   "adminAccess":  "local",
+                   "cloudflareAccess":  {
+                                            "teamDomain":  "",
+                                            "audience":  ""
+                                        }
+               },
+    "admin":  {
+                  "initialEmails":  [
+                                        "admin@example.com"
+                                    ]
+              },
+    "database":  {
+                     "path":  "data/sharepipe.db",
+                     "busyTimeoutMs":  5000
+                 },
+    "storage":  {
+                    "defaultBackend":  "local",
+                    "local":  {
+                                  "root":  "data/storage"
+                              },
+                    "s3":  {
+                               "enabled":  false,
+                               "endpoint":  "",
+                               "region":  "",
+                               "bucket":  "",
+                               "prefix":  "sharepipe",
+                               "pathStyle":  false,
+                               "serverSideEncryption":  "AES256"
+                           }
+                },
+    "uploads":  {
+                    "chunkSizeBytes":  8388608,
+                    "maxFileBytes":  10737418240,
+                    "maxShareBytes":  21474836480,
+                    "maxFilesPerShare":  1000,
+                    "sessionTTLMinutes":  1440
+                },
+    "sharing":  {
+                    "defaultExpiry":  "168h",
+                    "allowedExpiries":  [
+                                            "1h",
+                                            "24h",
+                                            "168h",
+                                            "720h"
+                                        ],
+                    "defaultDownloadLimit":  10,
+                    "grantTTLMinutes":  15,
+                    "metadataRetention":  "720h"
+                },
+    "zip":  {
+                "asyncThresholdBytes":  2147483648,
+                "cacheTTL":  "24h"
+            },
+    "backup":  {
+                   "directory":  "data/backups",
+                   "hour":  3,
+                   "retentionCount":  7
+               },
+    "logging":  {
+                    "directory":  "workdir/logs",
+                    "diagnosticRetention":  "168h"
+                },
+    "scanner":  {
+                    "enabled":  false,
+                    "command":  [
+                                    "workdir/tools/clamav/clamscan.exe",
+                                    "--no-summary",
+                                    "-"
+                                ],
+                    "timeoutSeconds":  300,
+                    "cleanExitCodes":  [
+                                           0
+                                       ],
+                    "infectedExitCodes":  [
+                                              1
+                                          ],
+                    "failClosed":  true
+                }
+}

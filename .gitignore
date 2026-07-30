@@ -1,0 +1,40 @@
+# Secrets and local overrides
+.env
+.env.*
+!.env.example
+config/sharepipe.json
+config/*.local.json
+
+# Runtime and generated data
+data/
+workdir/tmp/
+workdir/cache/
+workdir/intermediate/
+workdir/logs/
+workdir/secrets/
+workdir/tools/
+workdir/minio/
+outputs/
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# Frontend dependencies and generated assets
+web/node_modules/
+web/dist/
+web/coverage/
+cmd/sharepipe/webdist/app/
+playwright-report/
+test-results/
+
+# Go build output and editors
+bin/
+coverage.out
+*.exe
+*.test
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini

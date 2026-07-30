@@ -1,0 +1,35 @@
+{
+  "referenceDate": "2026-05-28",
+  "classA": [
+    "ListBuckets",
+    "PutBucket",
+    "ListObjects",
+    "PutObject",
+    "CopyObject",
+    "CompleteMultipartUpload",
+    "CreateMultipartUpload",
+    "LifecycleStorageTierTransition",
+    "ListMultipartUploads",
+    "UploadPart",
+    "UploadPartCopy",
+    "ListParts",
+    "PutBucketEncryption",
+    "PutBucketCors",
+    "PutBucketLifecycleConfiguration"
+  ],
+  "classB": [
+    "HeadBucket",
+    "HeadObject",
+    "GetObject",
+    "UsageSummary",
+    "GetBucketEncryption",
+    "GetBucketLocation",
+    "GetBucketCors",
+    "GetBucketLifecycleConfiguration"
+  ],
+  "free": [
+    "DeleteObject",
+    "DeleteBucket",
+    "AbortMultipartUpload"
+  ]
+}

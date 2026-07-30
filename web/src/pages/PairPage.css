@@ -1,0 +1,14 @@
+.pair-page { min-height: 100vh; background: var(--surface-subtle); }
+.pair-shell { display: grid; width: min(520px, calc(100% - 36px)); margin: 72px auto; justify-items: center; border: 1px solid var(--border); border-radius: 18px; background: var(--canvas); padding: 48px; text-align: center; box-shadow: 0 18px 50px rgb(16 24 40 / 8%); }
+.pair-shell h1 { margin: 18px 0 8px; font-size: 30px; }
+.pair-shell > p { margin: 0 0 28px; color: var(--muted); line-height: 1.6; }
+.pair-shell form { display: grid; width: 100%; gap: 16px; text-align: left; }
+.pair-icon { display: grid; width: 62px; height: 62px; place-items: center; border-radius: 50%; background: var(--primary-soft); color: var(--primary); }
+.pair-code-input { width: 100%; height: 64px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: #fff; color: var(--ink); font: 650 30px/1 monospace; letter-spacing: .48em; padding: 0 12px 0 28px; text-align: center; }
+.pair-code-input:focus { border-color: var(--primary); outline: 3px solid var(--primary-soft); }
+.pair-submit { width: 100%; min-height: 52px; }
+.turnstile-box { display: grid; min-height: 70px; place-items: center; }
+.pair-security { display: flex; gap: 8px; margin: 22px 0; color: var(--muted); font-size: 13px; text-align: left; }
+.pair-shell > a:not(.primary-button) { color: var(--primary); }
+.spin { animation: recovery-spin 900ms linear infinite; }
+@media (max-width: 600px) { .pair-shell { margin: 24px auto; padding: 34px 22px; } .pair-shell h1 { font-size: 26px; } }

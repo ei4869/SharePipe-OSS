@@ -1,0 +1,74 @@
+.app-header {
+  display: flex;
+  height: var(--header-height);
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding: 0 clamp(24px, 3vw, 42px);
+  background: var(--canvas);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #101828;
+  font-size: 20px;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: var(--primary);
+}
+
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.25;
+}
+
+.header-action {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.header-action:hover {
+  color: var(--primary);
+}
+
+.header-symbol {
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .app-header {
+    height: 72px;
+    padding-inline: 20px;
+  }
+
+  .brand {
+    font-size: 19px;
+  }
+
+  .brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .header-action span {
+    display: none;
+  }
+}

@@ -1,0 +1,84 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Verify and build the tagged source
+        shell: pwsh
+        run: |
+          .\scripts\verify.ps1 -DependencyAudit
+          $version = "${{ github.ref_name }}".TrimStart("v")
+          .\scripts\build.ps1 -Version $version -Output "outputs/sharepipe-windows-amd64.exe"
+
+      - name: Assemble the unsigned Windows package
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $stage = "outputs/release/SharePipe-OSS-$tag-windows-amd64"
+          New-Item -ItemType Directory -Path $stage -Force | Out-Null
+          Copy-Item outputs/sharepipe-windows-amd64.exe $stage/
+          Copy-Item config/sharepipe.example.json $stage/
+          Copy-Item README.md, LICENSE, NOTICE, THIRD_PARTY_NOTICES.md $stage/
+          Copy-Item docs $stage/docs -Recurse
+          New-Item -ItemType Directory -Path "$stage/scripts" -Force | Out-Null
+          Copy-Item scripts/initialize-secrets.ps1, scripts/rotate-secrets.ps1, scripts/start.ps1 "$stage/scripts/"
+          Copy-Item scripts/lib "$stage/scripts/lib" -Recurse
+          Copy-Item Start-SharePipe.cmd $stage/
+          Compress-Archive -Path "$stage/*" -DestinationPath "outputs/release/SharePipe-OSS-$tag-windows-amd64.zip" -CompressionLevel Optimal
+
+      - name: Generate the SPDX JSON SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+        with:
+          path: outputs/release/SharePipe-OSS-${{ github.ref_name }}-windows-amd64
+          format: spdx-json
+          output-file: outputs/release/sharepipe-oss-${{ github.ref_name }}.spdx.json
+          upload-artifact: false
+
+      - name: Generate checksums and a draft GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $releaseRoot = "outputs/release"
+          $assets = @(
+            "$releaseRoot/SharePipe-OSS-$tag-windows-amd64.zip",
+            "$releaseRoot/sharepipe-oss-$tag.spdx.json"
+          )
+          $checksumPath = "$releaseRoot/SHA256SUMS.txt"
+          $lines = foreach ($asset in $assets) {
+            $hash = (Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $([System.IO.Path]::GetFileName($asset))"
+          }
+          [System.IO.File]::WriteAllLines($checksumPath, $lines, (New-Object System.Text.UTF8Encoding($false)))
+          $notes = "Windows amd64 正式版。该二进制暂未进行 Authenticode 签名，Windows 可能显示未知发布者；使用前请核对 SHA256SUMS.txt。"
+          if (gh release view $tag --repo "${{ github.repository }}" 2>$null) {
+            gh release upload $tag @assets $checksumPath --clobber --repo "${{ github.repository }}"
+          } else {
+            gh release create $tag @assets $checksumPath --draft --verify-tag --title "SharePipe OSS $tag" --notes $notes --repo "${{ github.repository }}"
+          }
