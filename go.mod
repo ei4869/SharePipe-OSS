@@ -3,11 +3,11 @@ module github.com/ei4869/SharePipe-OSS
 go 1.26
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.43.0
+	github.com/aws/aws-sdk-go-v2 v1.43.2
 	github.com/aws/aws-sdk-go-v2/config v1.32.31
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.30
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.106.0
-	github.com/aws/smithy-go v1.27.3
+	github.com/aws/smithy-go v1.27.5
 	golang.org/x/crypto v0.54.0
 	golang.org/x/term v0.45.0
 	modernc.org/sqlite v1.54.0
