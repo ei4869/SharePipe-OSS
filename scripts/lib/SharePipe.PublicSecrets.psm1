@@ -16,33 +16,16 @@ function Set-PrivateAcl {
     if ($Container -and -not (Test-Path -LiteralPath $Path -PathType Container)) {
         New-Item -ItemType Directory -Path $Path -Force | Out-Null
     }
-    $security = if ($Container) {
-        New-Object System.Security.AccessControl.DirectorySecurity
-    } else {
-        New-Object System.Security.AccessControl.FileSecurity
-    }
-    $security.SetAccessRuleProtection($true, $false)
-    $inheritance = if ($Container) {
-        [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
-    } else {
-        [System.Security.AccessControl.InheritanceFlags]::None
-    }
+    $fullPath = [System.IO.Path]::GetFullPath($Path)
+    $icacls = Join-Path $env:SystemRoot "System32\icacls.exe"
+    if (-not (Test-Path -LiteralPath $icacls -PathType Leaf)) { throw "icacls.exe was not found." }
+    $permission = if ($Container) { "(OI)(CI)F" } else { "F" }
+    $arguments = @($fullPath, "/inheritance:r", "/grant:r")
     foreach ($sidValue in Get-AllowedSIDs) {
-        $sid = [System.Security.Principal.SecurityIdentifier]::new($sidValue)
-        $rule = New-Object System.Security.AccessControl.FileSystemAccessRule(
-            $sid,
-            [System.Security.AccessControl.FileSystemRights]::FullControl,
-            $inheritance,
-            [System.Security.AccessControl.PropagationFlags]::None,
-            [System.Security.AccessControl.AccessControlType]::Allow
-        )
-        [void]$security.AddAccessRule($rule)
+        $arguments += "*$($sidValue):$permission"
     }
-    if ($Container) {
-        [System.IO.Directory]::SetAccessControl([System.IO.Path]::GetFullPath($Path), $security)
-    } else {
-        [System.IO.File]::SetAccessControl([System.IO.Path]::GetFullPath($Path), $security)
-    }
+    & $icacls @arguments | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Could not restrict access to the secret path: $fullPath" }
 }
 
 function Assert-PrivateAcl {
