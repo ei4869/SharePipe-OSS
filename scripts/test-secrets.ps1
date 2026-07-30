@@ -42,13 +42,23 @@ $arguments = @(
     "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", (Join-Path $PSScriptRoot "start.ps1"),
     "-Config", $configRelative, "-Binary", $Binary, "-SecretPath", $secretRelative
 )
-$launcher = Start-Process -FilePath "powershell.exe" -ArgumentList $arguments -WorkingDirectory $projectRoot -RedirectStandardOutput (Join-Path $logRoot "stdout.log") -RedirectStandardError (Join-Path $logRoot "stderr.log") -PassThru
+$powershellExecutable = if ($PSVersionTable.PSEdition -eq "Core") {
+    Join-Path $PSHOME "pwsh.exe"
+} else {
+    Join-Path $PSHOME "powershell.exe"
+}
+$stdoutPath = Join-Path $logRoot "stdout.log"
+$stderrPath = Join-Path $logRoot "stderr.log"
+$launcher = Start-Process -FilePath $powershellExecutable -ArgumentList $arguments -WorkingDirectory $projectRoot -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath -PassThru
 $sharePipeProcess = $null
 try {
     $deadline = [DateTime]::UtcNow.AddSeconds(30)
     do {
         $launcher.Refresh()
-        if ($launcher.HasExited) { throw "DPAPI-protected launcher exited during startup." }
+        if ($launcher.HasExited) {
+            $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw -Encoding UTF8 } else { "" }
+            throw "DPAPI-protected launcher exited during startup with code $($launcher.ExitCode).`n$stderr"
+        }
         try { $health = Invoke-RestMethod -Uri "$baseURL/api/v1/health" -TimeoutSec 2 } catch { $health = $null }
         if ($null -ne $health -and $health.status -eq "ok") { break }
         Start-Sleep -Milliseconds 250
