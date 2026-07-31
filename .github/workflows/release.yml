@@ -59,6 +59,14 @@ jobs:
           output-file: outputs/release/sharepipe-oss-${{ github.ref_name }}.spdx.json
           upload-artifact: false
 
+      - name: Generate the CycloneDX JSON SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+        with:
+          path: outputs/release/SharePipe-OSS-${{ github.ref_name }}-windows-amd64
+          format: cyclonedx-json
+          output-file: outputs/release/sharepipe-oss-${{ github.ref_name }}.cyclonedx.json
+          upload-artifact: false
+
       - name: Generate checksums and a draft GitHub Release
         shell: pwsh
         env:
@@ -68,7 +76,8 @@ jobs:
           $releaseRoot = "outputs/release"
           $assets = @(
             "$releaseRoot/SharePipe-OSS-$tag-windows-amd64.zip",
-            "$releaseRoot/sharepipe-oss-$tag.spdx.json"
+            "$releaseRoot/sharepipe-oss-$tag.spdx.json",
+            "$releaseRoot/sharepipe-oss-$tag.cyclonedx.json"
           )
           $checksumPath = "$releaseRoot/SHA256SUMS.txt"
           $lines = foreach ($asset in $assets) {
