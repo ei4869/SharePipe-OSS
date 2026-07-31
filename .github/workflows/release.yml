@@ -40,15 +40,15 @@ jobs:
         run: |
           $tag = "${{ github.ref_name }}"
           $stage = "outputs/release/SharePipe-OSS-$tag-windows-amd64"
-          New-Item -ItemType Directory -Path $stage -Force | Out-Null
-          Copy-Item outputs/sharepipe-windows-amd64.exe $stage/
-          Copy-Item config/sharepipe.example.json $stage/
+          New-Item -ItemType Directory -Path "$stage/config", "$stage/outputs", "$stage/scripts" -Force | Out-Null
+          Copy-Item outputs/sharepipe-windows-amd64.exe "$stage/outputs/"
+          Copy-Item config/sharepipe.example.json "$stage/config/"
           Copy-Item README.md, LICENSE, NOTICE, THIRD_PARTY_NOTICES.md $stage/
           Copy-Item docs $stage/docs -Recurse
-          New-Item -ItemType Directory -Path "$stage/scripts" -Force | Out-Null
           Copy-Item scripts/initialize-secrets.ps1, scripts/rotate-secrets.ps1, scripts/start.ps1 "$stage/scripts/"
           Copy-Item scripts/lib "$stage/scripts/lib" -Recurse
           Copy-Item Start-SharePipe.cmd $stage/
+          .\scripts\test-release-package.ps1 -PackageRoot $stage
           Compress-Archive -Path "$stage/*" -DestinationPath "outputs/release/SharePipe-OSS-$tag-windows-amd64.zip" -CompressionLevel Optimal
 
       - name: Generate the SPDX JSON SBOM

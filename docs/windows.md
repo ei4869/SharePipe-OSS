@@ -6,14 +6,24 @@
 - Go 1.26 与 Node.js 24/npm；若只使用 Release ZIP，则不需要开发工具链。
 - NTFS 或其他支持可靠锁、原子重命名和 SQLite WAL 的本地文件系统。
 
+## 使用 Release ZIP
+
+下载并校验 Windows amd64 ZIP，解压后执行：
+
+```powershell
+Copy-Item .\config\sharepipe.example.json .\config\sharepipe.json
+.\scripts\initialize-secrets.ps1
+.\Start-SharePipe.cmd
+```
+
+编辑配置时至少确认监听地址、公开基础 URL、数据库路径、对象目录和备份目录。正式实例不要把数据库放在 OneDrive、FAT/exFAT 或不可靠的网络共享上。
+
 ## 从源码构建
 
 ```powershell
 .\scripts\build.ps1 -Version 0.1.0
 Copy-Item .\config\sharepipe.example.json .\config\sharepipe.json
 ```
-
-编辑本地配置时至少确认监听地址、公开基础 URL、数据库路径、对象目录和备份目录。正式实例不要把数据库放在 OneDrive、FAT/exFAT 或不可靠的网络共享上。
 
 ## 初始化和启动
 
