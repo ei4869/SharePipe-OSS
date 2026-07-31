@@ -14,7 +14,19 @@ SharePipe OSS 是一个面向可信个人和小团队的临时文件分享服务
 - 默认只监听 `127.0.0.1`；公网部署应使用受控的 HTTPS 反向代理并限制管理员入口。
 - 未知或主动内容类型只作为附件下载，不在浏览器中内联执行。
 
-## Windows 快速体验
+## Windows Release ZIP
+
+从 GitHub Release 下载 Windows amd64 ZIP 并核对 `SHA256SUMS.txt` 后，解压到本地目录：
+
+```powershell
+Copy-Item .\config\sharepipe.example.json .\config\sharepipe.json
+.\scripts\initialize-secrets.ps1
+.\Start-SharePipe.cmd
+```
+
+首次运行前编辑 `config\sharepipe.json`，至少确认监听地址、公开基础 URL、数据库路径、对象目录和备份目录。初始化命令只显示一次管理员引导密码，请立即保存到密码管理器。
+
+## 从源码快速体验
 
 前提：Windows PowerShell、Go 1.26、Node.js 24/npm，以及 Chrome 或 Edge。
 
