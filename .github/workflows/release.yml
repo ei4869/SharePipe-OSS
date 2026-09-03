@@ -52,7 +52,7 @@ jobs:
           Compress-Archive -Path "$stage/*" -DestinationPath "outputs/release/SharePipe-OSS-$tag-windows-amd64.zip" -CompressionLevel Optimal
 
       - name: Generate the SPDX JSON SBOM
-        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
         with:
           path: outputs/release/SharePipe-OSS-${{ github.ref_name }}-windows-amd64
           format: spdx-json
@@ -60,7 +60,7 @@ jobs:
           upload-artifact: false
 
       - name: Generate the CycloneDX JSON SBOM
-        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26
         with:
           path: outputs/release/SharePipe-OSS-${{ github.ref_name }}-windows-amd64
           format: cyclonedx-json
